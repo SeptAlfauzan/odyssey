@@ -1,0 +1,73 @@
+commands:
+  analyze:
+    description: Run lint checks if Flutter code is formatted
+    steps:
+      - run:
+          command: flutter format --set-exit-if-changed . || { echo 'Lint check failed'; exit 1; }
+          name: Analyze
+  build_android:
+    description: Builds APK artifact for Android
+    steps:
+      - run:
+          command: flutter build apk
+          name: Build APK
+  format:
+    description: Run checks if Flutter code is formatted
+    steps:
+      - run:
+          command: flutter format --set-exit-if-changed . || { echo 'Format check failed'; exit 1; }
+          name: Analyze
+  test:
+    description: Runs the tests of your Flutter app
+    steps:
+      - run:
+          command: flutter test
+          name: Test
+executors:
+  android:
+    docker:
+      - image: cimg/android:2022.06
+  default:
+    docker:
+      - image: cimg/base:stable
+  macos:
+    macos:
+      xcode: 13.4.1
+jobs:
+  build-android:
+    executor: android
+    steps:
+      - checkout
+      - flutter/install_sdk_and_pub:
+          flutter_version: 3.0.1
+      - build-android
+  build-ios:
+    executor: macos
+    steps:
+      - checkout
+      - flutter/install_sdk_and_pub:
+          flutter_version: 3.0.1
+      - flutter/install-pod-ios
+      - build-ios
+  tests:
+    executor: android
+    steps:
+      - checkout
+      - flutter/install_sdk_and_pub:
+          flutter_version: 3.0.1
+      - format
+      - analyze
+      - test
+orbs:
+  flutter: circleci/flutter@1.1.0
+version: 2.1
+workflows:
+  main:
+    jobs:
+      - tests
+      - build-android:
+          requires:
+            - tests
+      - build-ios:
+          requires:
+            - tests

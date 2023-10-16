@@ -1,0 +1,6 @@
+description: "Runs the tests of your Flutter app"
+steps:
+  - run:
+      name: "Test"
+      command: |-
+        flutter test

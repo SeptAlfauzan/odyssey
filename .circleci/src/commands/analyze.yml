@@ -1,0 +1,7 @@
+description: Run lint checks if Flutter code is formatted
+steps:
+  - run:
+      name: Analyze
+      command: >-
+        flutter format --set-exit-if-changed . || { echo 'Lint check failed';
+        exit 1; }

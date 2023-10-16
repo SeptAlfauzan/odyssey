@@ -12,10 +12,17 @@ class DetailInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: info,
+    var _width = MediaQuery.of(context).size.width * 0.8;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: _width,
+        padding: EdgeInsets.all(12),
+        color: Theme.of(context).colorScheme.background,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: info,
+        ),
       ),
     );
   }

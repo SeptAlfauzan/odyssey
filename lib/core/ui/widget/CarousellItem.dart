@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:odyssey/core/ui/style/TextStyle.dart';
+import 'package:odyssey/core/ui/widget/LikeButton.dart';
 
-class CarousellItem extends StatelessWidget {
+class CarousellItem extends StatefulWidget {
   final String imageUrl;
   final String name;
   final String location;
@@ -16,15 +17,20 @@ class CarousellItem extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<CarousellItem> createState() => _CarousellItemState();
+}
+
+class _CarousellItemState extends State<CarousellItem> {
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onClick(),
+      onTap: () => widget.onClick(),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16.0),
         child: Stack(
           children: [
             Image.network(
-              imageUrl,
+              widget.imageUrl,
               width: 240.0,
               height: 320.0,
               fit: BoxFit.cover,
@@ -40,27 +46,47 @@ class CarousellItem extends StatelessWidget {
                 width: 240.0,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min, //
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        name,
-                        style: OdysseyTextStyle.subtitle(),
-                      ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min, //
                         children: [
-                          const Icon(Icons.location_on_outlined,
-                              color: Colors.purple),
-                          Text(
-                            location,
-                            style: OdysseyTextStyle.body(),
+                          Container(
+                            width: 120,
+                            child: Text(
+                              widget.name,
+                              softWrap: true, // Enable text wrapping
+                              overflow: TextOverflow
+                                  .ellipsis, // Use ellipsis overflow
+                              maxLines: 1,
+                              style: OdysseyTextStyle.subtitle(),
+                            ),
                           ),
+                          const SizedBox(
+                            height: 8.0,
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.location_on_outlined,
+                                  color: Colors.purple),
+                              Container(
+                                width: 120,
+                                child: Text(
+                                  widget.location,
+                                  softWrap: true, // Enable text wrapping
+                                  overflow: TextOverflow
+                                      .ellipsis, // Use ellipsis overflow
+                                  maxLines: 1,
+                                  style: OdysseyTextStyle.body(),
+                                ),
+                              ),
+                            ],
+                          )
                         ],
-                      )
+                      ),
+                      LikedButton(),
                     ],
                   ),
                 ),
